@@ -9,7 +9,7 @@ cd "$(
 #====================================================
 #	System Request:Debian 9+/Ubuntu 18.04+/Centos 7+
 #	Dscription: V2ray ws+tls onekey Management
-#	Version: 1.0
+#	Version: 1.1
 #	Official document: www.v2fly.org
 #====================================================
 
@@ -27,7 +27,7 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
 # 版本
-shell_version="1.1.5.8"
+shell_version="1.1.5.9"
 shell_mode="None"
 github_branch="master"
 version_cmp="/tmp/version_cmp.tmp"
@@ -519,8 +519,9 @@ nginx_conf_add() {
     touch ${nginx_conf_dir}/v2ray.conf
     cat >${nginx_conf_dir}/v2ray.conf <<EOF
     server {
-        listen 443 ssl http2;
-        listen [::]:443 http2;
+        listen 100 ssl http2;
+        listen [::]:100 http2;
+        listen 443 ssl;
         ssl_certificate       /data/v2ray.crt;
         ssl_certificate_key   /data/v2ray.key;
         ssl_protocols         TLSv1.3;
