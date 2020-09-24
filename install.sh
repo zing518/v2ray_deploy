@@ -994,6 +994,7 @@ menu() {
         ;;
     3)
         bash <(curl -L -s https://raw.githubusercontent.com/wangyangyangisme/v2ray_deploy/${github_branch}/v2ray-install-release.sh)
+        modify_v2ray_service_file
         ;;
     4)
         read -rp "请输入UUID:" UUID
