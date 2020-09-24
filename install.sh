@@ -27,7 +27,7 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
 # 版本
-shell_version="1.1.6.1"
+shell_version="1.1.6.2"
 shell_mode="None"
 github_branch="master"
 version_cmp="/tmp/version_cmp.tmp"
@@ -851,6 +851,16 @@ modify_v2ray_service_file() {
     systemctl daemon-reload
 }
 
+start_v2ray() {
+    if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
+        systemctl start v2ray
+    fi
+    if [[ "$?" -ne 0 ]]; then
+        echo 'error: Failed to start V2Ray service.'
+        exit 1
+    fi
+    echo 'info: Start the V2Ray service.'
+}
 
 install_v2ray_ws_tls() {
     is_root
@@ -994,6 +1004,7 @@ menu() {
     3)
         bash <(curl -L -s https://raw.githubusercontent.com/wangyangyangisme/v2ray_deploy/${github_branch}/v2ray-install-release.sh)
         modify_v2ray_service_file
+        start_v2ray
         ;;
     4)
         read -rp "请输入UUID:" UUID
