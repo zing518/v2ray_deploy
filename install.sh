@@ -152,6 +152,13 @@ dependency_install() {
     ${INS} install wget git lsof -y
 
     if [[ "${ID}" == "centos" ]]; then
+        ${INS} -y install iputils
+    else
+        ${INS} -y install iputils-ping
+    fi
+    judge "安装 iputils-ping"
+
+    if [[ "${ID}" == "centos" ]]; then
         ${INS} -y install crontabs
     else
         ${INS} -y install cron

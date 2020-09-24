@@ -114,10 +114,11 @@ installed: /etc/systemd/system/v2ray.service
 installed: /etc/systemd/system/v2ray@.service
 ```
 
-伪装站点
-
+伪装
 https://github.com/wangyangyangisme/3DCEList
 
 bbr
-
 https://github.com/wangyangyangisme/Linux-NetSpeed
+
+原仓库
+https://github.com/wulabing/V2Ray_ws-tls_bash_onekey
