@@ -8,11 +8,9 @@ cd "$(
 )" || exit
 #====================================================
 #	System Request:Debian 9+/Ubuntu 18.04+/Centos 7+
-#	Author:	wulabing
 #	Dscription: V2ray ws+tls onekey Management
 #	Version: 1.0
-#	email:admin@wulabing.com
-#	Official document: www.v2ray.com
+#	Official document: www.v2fly.org
 #====================================================
 
 #fonts color
@@ -29,7 +27,7 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
 # 版本
-shell_version="1.1.5.7"
+shell_version="1.1.5.8"
 shell_mode="None"
 github_branch="master"
 version_cmp="/tmp/version_cmp.tmp"
@@ -630,7 +628,7 @@ vmess_qr_config_tls_ws() {
     cat >$v2ray_qr_config_file <<-EOF
 {
   "v": "2",
-  "ps": "wulabing_${domain}",
+  "ps": "${domain}",
   "add": "${domain}",
   "port": "${port}",
   "id": "${UUID}",
@@ -648,7 +646,7 @@ vmess_qr_config_h2() {
     cat >$v2ray_qr_config_file <<-EOF
 {
   "v": "2",
-  "ps": "wulabing_${domain}",
+  "ps": "${domain}",
   "add": "${domain}",
   "port": "${port}",
   "id": "${UUID}",
@@ -848,6 +846,12 @@ judge_mode() {
         fi
     fi
 }
+
+modify_v2ray_service_file() {
+    sed -i "/User=nobody/c \User=root" ${v2ray_systemd_file}
+}
+
+
 install_v2ray_ws_tls() {
     is_root
     check_system
@@ -987,6 +991,7 @@ menu() {
         ;;
     3)
         bash <(curl -L -s https://raw.githubusercontent.com/wangyangyangisme/v2ray_deploy/${github_branch}/v2ray-install-release.sh)
+        modify_v2ray_service_file
         ;;
     4)
         read -rp "请输入UUID:" UUID
