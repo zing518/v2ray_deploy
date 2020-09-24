@@ -27,7 +27,7 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
 # 版本
-shell_version="1.1.5.9"
+shell_version="1.1.5.10"
 shell_mode="None"
 github_branch="master"
 version_cmp="/tmp/version_cmp.tmp"
@@ -850,6 +850,7 @@ judge_mode() {
 
 modify_v2ray_service_file() {
     sed -i "/User=nobody/c \User=root" ${v2ray_systemd_file}
+    systemctl daemon-reload
 }
 
 
