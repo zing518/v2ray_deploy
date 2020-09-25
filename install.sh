@@ -715,7 +715,7 @@ info_extraction() {
 }
 basic_information() {
     {
-        echo -e "${OK} ${GreenBG} V2ray+ws+tls 安装成功"
+        echo -e "${OK} ${GreenBG} V2ray+ws+tls+web 安装成功"
         echo -e "${Red} V2ray 配置信息 ${Font}"
         echo -e "${Red} 地址（address）:${Font} $(info_extraction '\"add\"') "
         echo -e "${Red} 端口（port）：${Font} $(info_extraction '\"port\"') "
