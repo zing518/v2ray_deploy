@@ -27,7 +27,7 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
 # 版本
-shell_version="1.1.6.3"
+shell_version="1.1.6.4"
 shell_mode="None"
 github_branch="master"
 version_cmp="/tmp/version_cmp.tmp"
@@ -915,11 +915,9 @@ install_v2ray_ws_tls_web_me() {
     basic_optimization
     domain_check
     old_config_exist_check
-    port_alterid_set
     v2ray_install
     modify_v2ray_service_file
     port_exist_check 80
-    port_exist_check "${port}"
     nginx_exist_check
     v2ray_conf_add_tls_me
     nginx_conf_add
