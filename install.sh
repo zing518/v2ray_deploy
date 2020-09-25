@@ -27,7 +27,7 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
 # 版本
-shell_version="1.1.6.4"
+shell_version="1.1.6.5"
 shell_mode="None"
 github_branch="master"
 version_cmp="/tmp/version_cmp.tmp"
@@ -502,8 +502,6 @@ v2ray_conf_add_tls_me() {
     cd $v2ray_conf_dir || exit
     wget --no-check-certificate https://raw.githubusercontent.com/wangyangyangisme/v2ray_deploy/${github_branch}/tls_me/config.json -O config.json
     modify_path
-    modify_alterid
-    modify_inbound_port
 }
 
 v2ray_conf_add_h2() {
@@ -915,9 +913,11 @@ install_v2ray_ws_tls_web_me() {
     basic_optimization
     domain_check
     old_config_exist_check
+    port_alterid_set
     v2ray_install
     modify_v2ray_service_file
     port_exist_check 80
+    port_exist_check "${port}"
     nginx_exist_check
     v2ray_conf_add_tls_me
     nginx_conf_add
@@ -1030,8 +1030,8 @@ menu() {
     echo -e "${Green}14.${Font} 证书 有效期更新"
     echo -e "${Green}15.${Font} 卸载 V2Ray"
     echo -e "${Green}16.${Font} 更新 证书crontab计划任务"
-    echo -e "${Green}17.${Font} 清空 证书遗留文件"
-    echo -e "${Green}18.${Font} 退出 \n"
+    echo -e "${Green}1.${Font} 清空 证书遗留文件"
+    echo -e "${Green}17.${Font} 退出 \n"
 
     read -rp "请输入数字：" menu_num
     case $menu_num in
