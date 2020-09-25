@@ -27,7 +27,7 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
 # 版本
-shell_version="1.1.6.5"
+shell_version="1.1.6.6"
 shell_mode="None"
 github_branch="master"
 version_cmp="/tmp/version_cmp.tmp"
@@ -502,6 +502,7 @@ v2ray_conf_add_tls_me() {
     cd $v2ray_conf_dir || exit
     wget --no-check-certificate https://raw.githubusercontent.com/wangyangyangisme/v2ray_deploy/${github_branch}/tls_me/config.json -O config.json
     modify_path
+    modify_inbound_port
 }
 
 v2ray_conf_add_h2() {
