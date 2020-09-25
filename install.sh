@@ -27,7 +27,7 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
 # 版本
-shell_version="1.1.6.2"
+shell_version="1.1.6.3"
 shell_mode="None"
 github_branch="master"
 version_cmp="/tmp/version_cmp.tmp"
@@ -40,7 +40,7 @@ web_dir="/home/wwwroot"
 nginx_openssl_src="/usr/local/src"
 v2ray_bin_dir="/usr/local/bin"
 v2ray_info_file="$HOME/v2ray_info.inf"
-v2ray_qr_config_file="/usr/local/vmess_qr.json"
+v2ray_qr_config_file="${v2ray_conf_dir}/vmess_qr.json"
 nginx_systemd_file="/etc/systemd/system/nginx.service"
 v2ray_systemd_file="/etc/systemd/system/v2ray.service"
 v2ray_access_log="/var/log/v2ray/access.log"
@@ -238,8 +238,8 @@ port_alterid_set() {
     if [[ "on" != "$old_config_status" ]]; then
         read -rp "请输入连接端口（default:443）:" port
         [[ -z ${port} ]] && port="443"
-        read -rp "请输入alterID（default:2 仅允许填数字）:" alterID
-        [[ -z ${alterID} ]] && alterID="2"
+        read -rp "请输入alterID（default:0 仅允许填数字）:" alterID
+        [[ -z ${alterID} ]] && alterID="0"
     fi
 }
 modify_path() {
@@ -497,6 +497,15 @@ v2ray_conf_add_tls() {
     modify_inbound_port
     modify_UUID
 }
+
+v2ray_conf_add_tls_me() {
+    cd $v2ray_conf_dir || exit
+    wget --no-check-certificate https://raw.githubusercontent.com/wangyangyangisme/v2ray_deploy/${github_branch}/tls_me/config.json -O config.json
+    modify_path
+    modify_alterid
+    modify_inbound_port
+}
+
 v2ray_conf_add_h2() {
     cd $v2ray_conf_dir || exit
     wget --no-check-certificate https://raw.githubusercontent.com/wangyangyangisme/v2ray_deploy/${github_branch}/http2/config.json -O config.json
@@ -869,7 +878,7 @@ start_v2ray() {
     echo 'info: Start the V2Ray service.'
 }
 
-install_v2ray_ws_tls() {
+install_v2ray_ws_tls_web() {
     is_root
     check_system
     chrony_install
@@ -897,6 +906,36 @@ install_v2ray_ws_tls() {
     enable_process_systemd
     acme_cron_update
 }
+
+install_v2ray_ws_tls_web_me() {
+    is_root
+    check_system
+    chrony_install
+    dependency_install
+    basic_optimization
+    domain_check
+    old_config_exist_check
+    port_alterid_set
+    v2ray_install
+    modify_v2ray_service_file
+    port_exist_check 80
+    port_exist_check "${port}"
+    nginx_exist_check
+    v2ray_conf_add_tls_me
+    nginx_conf_add
+    web_camouflage
+    ssl_judge_and_install
+    nginx_systemd
+    vmess_qr_config_tls_ws
+    basic_information
+    vmess_link_image_choice
+    tls_type
+    show_information
+    start_process_systemd
+    enable_process_systemd
+    acme_cron_update
+}
+
 install_v2_h2() {
     is_root
     check_system
@@ -974,26 +1013,27 @@ menu() {
 
     echo -e "—————————————— 安装向导 ——————————————"""
     echo -e "${Green}0.${Font}  升级 脚本"
-    echo -e "${Green}1.${Font}  安装 V2Ray (Nginx+ws+tls)"
-    echo -e "${Green}2.${Font}  安装 V2Ray (http/2)"
-    echo -e "${Green}3.${Font}  升级 V2Ray core"
+    echo -e "${Green}1.${Font}  安装 V2Ray (Nginx+ws+tls+web)"
+    echo -e "${Green}2.${Font}  安装 V2Ray (Nginx+ws+tls+web) *"
+    echo -e "${Green}3.${Font}  安装 V2Ray (http/2)"
+    echo -e "${Green}4.${Font}  升级 V2Ray core"
     echo -e "—————————————— 配置变更 ——————————————"
-    echo -e "${Green}4.${Font}  变更 UUID"
-    echo -e "${Green}5.${Font}  变更 alterid"
-    echo -e "${Green}6.${Font}  变更 port"
-    echo -e "${Green}7.${Font}  变更 TLS 版本(仅ws+tls有效)"
+    echo -e "${Green}5.${Font}  变更 UUID"
+    echo -e "${Green}6.${Font}  变更 alterid"
+    echo -e "${Green}7.${Font}  变更 port"
+    echo -e "${Green}8.${Font}  变更 TLS 版本(仅ws+tls有效)"
     echo -e "—————————————— 查看信息 ——————————————"
-    echo -e "${Green}8.${Font}  查看 实时访问日志"
-    echo -e "${Green}9.${Font}  查看 实时错误日志"
-    echo -e "${Green}10.${Font} 查看 V2Ray 配置信息"
+    echo -e "${Green}9.${Font}  查看 实时访问日志"
+    echo -e "${Green}10.${Font}  查看 实时错误日志"
+    echo -e "${Green}11.${Font} 查看 V2Ray 配置信息"
     echo -e "—————————————— 其他选项 ——————————————"
-    echo -e "${Green}11.${Font} 安装 4合1 bbr 锐速安装脚本"
-    echo -e "${Green}12.${Font} 安装 MTproxy(支持TLS混淆)"
-    echo -e "${Green}13.${Font} 证书 有效期更新"
-    echo -e "${Green}14.${Font} 卸载 V2Ray"
-    echo -e "${Green}15.${Font} 更新 证书crontab计划任务"
-    echo -e "${Green}16.${Font} 清空 证书遗留文件"
-    echo -e "${Green}17.${Font} 退出 \n"
+    echo -e "${Green}12.${Font} 安装 4合1 bbr 锐速安装脚本"
+    echo -e "${Green}13.${Font} 安装 MTproxy(支持TLS混淆)"
+    echo -e "${Green}14.${Font} 证书 有效期更新"
+    echo -e "${Green}15.${Font} 卸载 V2Ray"
+    echo -e "${Green}16.${Font} 更新 证书crontab计划任务"
+    echo -e "${Green}17.${Font} 清空 证书遗留文件"
+    echo -e "${Green}18.${Font} 退出 \n"
 
     read -rp "请输入数字：" menu_num
     case $menu_num in
@@ -1002,28 +1042,32 @@ menu() {
         ;;
     1)
         shell_mode="ws"
-        install_v2ray_ws_tls
+        install_v2ray_ws_tls_web
         ;;
     2)
+        shell_mode="ws"
+        install_v2ray_ws_tls_web_me
+        ;;
+    3)
         shell_mode="h2"
         install_v2_h2
         ;;
-    3)
+    4)
         bash <(curl -L -s https://raw.githubusercontent.com/wangyangyangisme/v2ray_deploy/${github_branch}/v2ray-install-release.sh)
         modify_v2ray_service_file
         start_v2ray
         ;;
-    4)
+    5)
         read -rp "请输入UUID:" UUID
         modify_UUID
         start_process_systemd
         ;;
-    5)
+    6)
         read -rp "请输入alterID:" alterID
         modify_alterid
         start_process_systemd
         ;;
-    6)
+    7)
         read -rp "请输入连接端口:" port
         if grep -q "ws" $v2ray_qr_config_file; then
             modify_nginx_port
@@ -1032,16 +1076,16 @@ menu() {
         fi
         start_process_systemd
         ;;
-    7)
+    8)
         tls_type
         ;;
-    8)
+    9)
         show_access_log
         ;;
-    9)
+    10)
         show_error_log
         ;;
-    10)
+    11)
         basic_information
         if [[ $shell_mode == "ws" ]]; then
             vmess_link_image_choice
@@ -1050,27 +1094,27 @@ menu() {
         fi
         show_information
         ;;
-    11)
+    12)
         bbr_boost_sh
         ;;
-    12)
+    13)
         mtproxy_sh
         ;;
-    13)
+    14)
         stop_process_systemd
         ssl_update_manuel
         start_process_systemd
         ;;
-    14)
+    15)
         uninstall_all
         ;;
-    15)
+    16)
         acme_cron_update
         ;;
-    16)
+    17)
         delete_tls_key_and_crt
         ;;
-    17)
+    18)
         exit 0
         ;;
     *)
