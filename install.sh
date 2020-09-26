@@ -1031,8 +1031,8 @@ menu() {
     echo -e "${Green}14.${Font} 证书 有效期更新"
     echo -e "${Green}15.${Font} 卸载 V2Ray"
     echo -e "${Green}16.${Font} 更新 证书crontab计划任务"
-    echo -e "${Green}17.${Font} 清空 证书遗留文件"
-    echo -e "${Green}18.${Font} 退出 \n"
+    echo -e "${Green}1.${Font} 清空 证书遗留文件"
+    echo -e "${Green}17.${Font} 退出 \n"
 
     read -rp "请输入数字：" menu_num
     case $menu_num in
