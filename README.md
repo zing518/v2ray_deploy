@@ -1,12 +1,5 @@
 ## V2Ray 基于 Nginx 的 vmess+ws+tls 一键安装脚本
 
-> 感谢 JetBrains 提供的非商业开源软件开发授权
-
-> Thanks for non-commercial open source development authorization by JetBrains
-### Telegram 群组
-* telegram 交流群:https://t.me/wulabing_v2ray 
-* telegram 更新公告频道：https://t.me/wulabing_channel
-
 ### 准备工作
 * 准备一个域名，并将A记录添加好。
 * [V2ray官方说明](https://www.v2ray.com/)，了解 TLS WebSocket 及 V2ray 相关信息
