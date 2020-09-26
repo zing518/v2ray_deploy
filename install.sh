@@ -27,7 +27,7 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
 # 版本
-shell_version="1.1.6.6"
+shell_version="1.1.6.7"
 shell_mode="None"
 github_branch="master"
 version_cmp="/tmp/version_cmp.tmp"
@@ -1023,7 +1023,7 @@ menu() {
     echo -e "${Green}8.${Font}  变更 TLS 版本(仅ws+tls有效)"
     echo -e "—————————————— 查看信息 ——————————————"
     echo -e "${Green}9.${Font}  查看 实时访问日志"
-    echo -e "${Green}10.${Font}  查看 实时错误日志"
+    echo -e "${Green}10.${Font} 查看 实时错误日志"
     echo -e "${Green}11.${Font} 查看 V2Ray 配置信息"
     echo -e "—————————————— 其他选项 ——————————————"
     echo -e "${Green}12.${Font} 安装 4合1 bbr 锐速安装脚本"
@@ -1031,8 +1031,8 @@ menu() {
     echo -e "${Green}14.${Font} 证书 有效期更新"
     echo -e "${Green}15.${Font} 卸载 V2Ray"
     echo -e "${Green}16.${Font} 更新 证书crontab计划任务"
-    echo -e "${Green}1.${Font} 清空 证书遗留文件"
-    echo -e "${Green}17.${Font} 退出 \n"
+    echo -e "${Green}17.${Font} 清空 证书遗留文件"
+    echo -e "${Green}18.${Font} 退出 \n"
 
     read -rp "请输入数字：" menu_num
     case $menu_num in
